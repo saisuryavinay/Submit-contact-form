@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Form</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .contact-section {
+      width: 100%;
+      max-width: 500px;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(8px);
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      text-align: center;
+    }
+
+    .contact-section h2 {
+      font-size: 2rem;
+      margin-bottom: 30px;
+      color: #fff;
+    }
+
+    .contact-section h2 span {
+      color: #00e5ff;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      padding: 15px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder {
+      color: #ccc;
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      box-shadow: 0 0 10px #00e5ff;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .contact-form button {
+      background: linear-gradient(45deg, #ff416c, #ff4b2b);
+      border: none;
+      padding: 15px;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.4s ease;
+      letter-spacing: 1px;
+    }
+
+    .contact-form button:hover {
+      background: linear-gradient(45deg, #00e5ff, #00bcd4);
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #00e5ff;
+    }
+
+    #msg {
+      margin-top: 15px;
+      color: #00e5ff;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <section class="contact-section">
+    <h2>Contact <span>Me</span></h2>
+    <form class="contact-form" name="submit-to-google-sheet">
+      <input type="text" name="Name" placeholder="Your Name" required />
+      <input type="email" name="Email" placeholder="Your Email" required />
+      <textarea name="Message" placeholder="Your Message" rows="5" required></textarea>
+      <button type="submit">Submit</button>
+    </form>
+    <span id="msg"></span>
+  </section>
+
+  <script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzWhcYBC3qLTXIe56kFb6-6yh9-eAHQKK6iiyiSWygqIUaUL3xZSScvJA9UJKIdP2Vq/exec';
+    const form = document.forms['submit-to-google-sheet'];
+    const msg = document.getElementById("msg");
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+        .then(response => {
+          msg.innerHTML = "Message sent successfully!";
+          setTimeout(() => msg.innerHTML = "", 5000);
+          form.reset();
+        })
+        .catch(error => {
+          msg.innerHTML = "Error sending message!";
+          console.error('Error!', error.message);
+        });
+    });
+  </script>
+</body>
+</html>
